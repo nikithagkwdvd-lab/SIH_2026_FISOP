@@ -1,0 +1,167 @@
+version: '3.8'
+
+services:
+  # =========================================================================
+  # 1. KEYCLOAK IDENTITY PROVIDER (OIDC / OAuth2)
+  # =========================================================================
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    restart: unless-stopped
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_pass_2026
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - gov-interop-net
+
+  # =========================================================================
+  # 2. REVENUE DEPARTMENT SYSTEM
+  # =========================================================================
+  revenue-db:
+    image: postgres:16-alpine
+    container_name: revenue-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${REVENUE_DB_USER:-revenue_user}
+      POSTGRES_PASSWORD: ${REVENUE_DB_PASSWORD:-revenue_pass_2026}
+      POSTGRES_DB: ${REVENUE_DB_NAME:-revenue_db}
+    volumes:
+      - ./revenue/db_init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${REVENUE_DB_USER:-revenue_user} -d ${REVENUE_DB_NAME:-revenue_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  revenue-api:
+    build:
+      context: ./revenue
+      dockerfile: Dockerfile
+    container_name: revenue-api
+    restart: unless-stopped
+    environment:
+      REVENUE_DATABASE_URL: postgresql://${REVENUE_DB_USER:-revenue_user}:${REVENUE_DB_PASSWORD:-revenue_pass_2026}@revenue-db:5432/${REVENUE_DB_NAME:-revenue_db}
+    ports:
+      - "8001:8000"
+    depends_on:
+      revenue-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  # =========================================================================
+  # 3. LAND DEPARTMENT SYSTEM
+  # =========================================================================
+  land-db:
+    image: postgres:16-alpine
+    container_name: land-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${LAND_DB_USER:-land_user}
+      POSTGRES_PASSWORD: ${LAND_DB_PASSWORD:-land_pass_2026}
+      POSTGRES_DB: ${LAND_DB_NAME:-land_db}
+    volumes:
+      - ./land/db_init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LAND_DB_USER:-land_user} -d ${LAND_DB_NAME:-land_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  land-api:
+    build:
+      context: ./land
+      dockerfile: Dockerfile
+    container_name: land-api
+    restart: unless-stopped
+    environment:
+      LAND_DATABASE_URL: postgresql://${LAND_DB_USER:-land_user}:${LAND_DB_PASSWORD:-land_pass_2026}@land-db:5432/${LAND_DB_NAME:-land_db}
+    ports:
+      - "8002:8000"
+    depends_on:
+      land-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  # =========================================================================
+  # 4. WELFARE DEPARTMENT SYSTEM
+  # =========================================================================
+  welfare-db:
+    image: postgres:16-alpine
+    container_name: welfare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${WELFARE_DB_USER:-welfare_user}
+      POSTGRES_PASSWORD: ${WELFARE_DB_PASSWORD:-welfare_pass_2026}
+      POSTGRES_DB: ${WELFARE_DB_NAME:-welfare_db}
+    volumes:
+      - ./welfare/db_init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${WELFARE_DB_USER:-welfare_user} -d ${WELFARE_DB_NAME:-welfare_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  welfare-api:
+    build:
+      context: ./welfare
+      dockerfile: Dockerfile
+    container_name: welfare-api
+    restart: unless-stopped
+    environment:
+      WELFARE_DATABASE_URL: postgresql://${WELFARE_DB_USER:-welfare_user}:${WELFARE_DB_PASSWORD:-welfare_pass_2026}@welfare-db:5432/${WELFARE_DB_NAME:-welfare_db}
+    ports:
+      - "8003:8000"
+    depends_on:
+      welfare-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gov-interop-net
+
+  # =========================================================================
+  # 5. CAMUNDA 8 WORKFLOW ENGINE (ZEEBE)
+  # =========================================================================
+  zeebe:
+    image: camunda/zeebe:8.5.0
+    container_name: zeebe-engine
+    restart: unless-stopped
+    environment:
+      - ZEEBE_LOG_LEVEL=info
+      - CAMUNDA_OPERATE_CSRF_PREVENTIONENABLED=false
+    ports:
+      - "26500:26500"
+      - "8088:8088"
+    networks:
+      - gov-interop-net
+
+networks:
+  gov-interop-net:
+    driver: bridge
+

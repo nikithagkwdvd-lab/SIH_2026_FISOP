@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  id="Definitions_Scholarship"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.0.0">
+  <bpmn:process id="scholarship-eligibility-workflow" name="Scholarship Eligibility Workflow" isExecutable="true">
+    
+    <!-- Start Event -->
+    <bpmn:startEvent id="StartEvent_1" name="Application Submitted">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Task 1: Validate Application -->
+    <bpmn:serviceTask id="Task_ValidateApplication" name="Validate Application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="validate-application" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 2: Check Consent -->
+    <bpmn:serviceTask id="Task_CheckConsent" name="Check Consent">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="check-consent" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 3: Resolve Identity -->
+    <bpmn:serviceTask id="Task_ResolveIdentity" name="Resolve Identity">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="resolve-identity" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 4: Verify Income (Revenue) -->
+    <bpmn:serviceTask id="Task_VerifyIncome" name="Verify Income">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="verify-income" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 5: Verify Property (Land) -->
+    <bpmn:serviceTask id="Task_VerifyProperty" name="Verify Property">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="verify-property" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 6: Verify Welfare (Welfare) -->
+    <bpmn:serviceTask id="Task_VerifyWelfare" name="Verify Welfare">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="verify-welfare" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 7: Evaluate Eligibility -->
+    <bpmn:serviceTask id="Task_EvaluateEligibility" name="Evaluate Eligibility">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="evaluate-eligibility" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Gateway: Is Eligible? -->
+    <bpmn:exclusiveGateway id="Gateway_Eligibility" name="Is Eligible?">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_Eligible</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Ineligible</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <!-- Task 8A: Approve Application -->
+    <bpmn:serviceTask id="Task_ApproveApplication" name="Approve Application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="approve-application" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Eligible</bpmn:incoming>
+      <bpmn:outgoing>Flow_ApprovalDone</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 8B: Reject Application -->
+    <bpmn:serviceTask id="Task_RejectApplication" name="Reject Application">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="reject-application" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Ineligible</bpmn:incoming>
+      <bpmn:outgoing>Flow_RejectionDone</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Gateway Join -->
+    <bpmn:exclusiveGateway id="Gateway_Join">
+      <bpmn:incoming>Flow_ApprovalDone</bpmn:incoming>
+      <bpmn:incoming>Flow_RejectionDone</bpmn:incoming>
+      <bpmn:outgoing>Flow_PostDecision</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <!-- Task 9: Update Application Status -->
+    <bpmn:serviceTask id="Task_UpdateApplicationStatus" name="Update Application Status">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-application-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_PostDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Notification</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 10: Create Notification -->
+    <bpmn:serviceTask id="Task_CreateNotification" name="Create Notification">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="create-notification" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Notification</bpmn:incoming>
+      <bpmn:outgoing>Flow_Audit</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Task 11: Write Audit Record -->
+    <bpmn:serviceTask id="Task_WriteAuditRecord" name="Write Audit Record">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="audit-workflow" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Audit</bpmn:incoming>
+      <bpmn:outgoing>Flow_End</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- End Event -->
+    <bpmn:endEvent id="EndEvent_1" name="Application Processed">
+      <bpmn:incoming>Flow_End</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_ValidateApplication" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_ValidateApplication" targetRef="Task_CheckConsent" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_CheckConsent" targetRef="Task_ResolveIdentity" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_ResolveIdentity" targetRef="Task_VerifyIncome" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_VerifyIncome" targetRef="Task_VerifyProperty" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_VerifyProperty" targetRef="Task_VerifyWelfare" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_VerifyWelfare" targetRef="Task_EvaluateEligibility" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_EvaluateEligibility" targetRef="Gateway_Eligibility" />
+    
+    <bpmn:sequenceFlow id="Flow_Eligible" name="Eligible" sourceRef="Gateway_Eligibility" targetRef="Task_ApproveApplication">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eligibility_result = "ELIGIBLE"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="Flow_Ineligible" name="Ineligible" sourceRef="Gateway_Eligibility" targetRef="Task_RejectApplication">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eligibility_result != "ELIGIBLE"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+    <bpmn:sequenceFlow id="Flow_ApprovalDone" sourceRef="Task_ApproveApplication" targetRef="Gateway_Join" />
+    <bpmn:sequenceFlow id="Flow_RejectionDone" sourceRef="Task_RejectApplication" targetRef="Gateway_Join" />
+    <bpmn:sequenceFlow id="Flow_PostDecision" sourceRef="Gateway_Join" targetRef="Task_UpdateApplicationStatus" />
+    <bpmn:sequenceFlow id="Flow_Notification" sourceRef="Task_UpdateApplicationStatus" targetRef="Task_CreateNotification" />
+    <bpmn:sequenceFlow id="Flow_Audit" sourceRef="Task_CreateNotification" targetRef="Task_WriteAuditRecord" />
+    <bpmn:sequenceFlow id="Flow_End" sourceRef="Task_WriteAuditRecord" targetRef="EndEvent_1" />
+
+  </bpmn:process>
+</bpmn:definitions>

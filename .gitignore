@@ -1,0 +1,46 @@
+# Keycloak binary distribution (unpacked — large JARs, not needed in source control)
+government-systems/keycloak-24.0.5/
+
+# Local SQLite dev databases
+government-systems/*.db
+backend/*.db
+*.db
+*.sqlite
+
+# Secrets
+.env
+backend/.env
+frontend/.env
+government-systems/.env
+
+# Python
+.venv/
+backend/.venv/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+backend/.pytest_cache/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+node_modules/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
+
+# Antigravity / AI artifacts
+.gemini/
+scratch/
+implementation_plan.md
+walkthrough.md

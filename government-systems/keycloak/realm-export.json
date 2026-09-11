@@ -1,0 +1,737 @@
+{
+  "realm": "government-interoperability",
+  "enabled": true,
+  "accessTokenLifespan": 3600,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "clients": [
+    {
+      "clientId": "interoperability-api",
+      "name": "Government Digital Interoperability API",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:3000",
+        "http://localhost:8000/*",
+        "http://localhost:8000/docs"
+      ],
+      "webOrigins": [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "+"
+      ],
+      "protocolMappers": [
+        {
+          "name": "department_code",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "department_code",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "department_code",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "canonical_citizen_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "canonical_citizen_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "canonical_citizen_id",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "CITIZEN",
+        "description": "Citizen role"
+      },
+      {
+        "name": "DEPARTMENT_OFFICIAL",
+        "description": "Department Official role"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Platform Admin role"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "citizen_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000001",
+      "email": "citizen.000001@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000001"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000001"
+        ]
+      }
+    },
+    {
+      "username": "citizen_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000002",
+      "email": "citizen.000002@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000002"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000002"
+        ]
+      }
+    },
+    {
+      "username": "citizen_03",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000003",
+      "email": "citizen.000003@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000003"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000003"
+        ]
+      }
+    },
+    {
+      "username": "citizen_04",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000004",
+      "email": "citizen.000004@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000004"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000004"
+        ]
+      }
+    },
+    {
+      "username": "citizen_05",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000005",
+      "email": "citizen.000005@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000005"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000005"
+        ]
+      }
+    },
+    {
+      "username": "citizen_06",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000006",
+      "email": "citizen.000006@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000006"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000006"
+        ]
+      }
+    },
+    {
+      "username": "citizen_07",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000007",
+      "email": "citizen.000007@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000007"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000007"
+        ]
+      }
+    },
+    {
+      "username": "citizen_08",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000008",
+      "email": "citizen.000008@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000008"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000008"
+        ]
+      }
+    },
+    {
+      "username": "citizen_09",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000009",
+      "email": "citizen.000009@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000009"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000009"
+        ]
+      }
+    },
+    {
+      "username": "citizen_10",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000010",
+      "email": "citizen.000010@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000010"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000010"
+        ]
+      }
+    },
+    {
+      "username": "citizen_11",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000011",
+      "email": "citizen.000011@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000011"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000011"
+        ]
+      }
+    },
+    {
+      "username": "citizen_12",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000012",
+      "email": "citizen.000012@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000012"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000012"
+        ]
+      }
+    },
+    {
+      "username": "citizen_13",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000013",
+      "email": "citizen.000013@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000013"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000013"
+        ]
+      }
+    },
+    {
+      "username": "citizen_14",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000014",
+      "email": "citizen.000014@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000014"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000014"
+        ]
+      }
+    },
+    {
+      "username": "citizen_15",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Synthetic",
+      "lastName": "Citizen 000015",
+      "email": "citizen.000015@synthetic-gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CITIZEN"
+      ],
+      "attributes": {
+        "preferred_username": [
+          "CIT-000015"
+        ],
+        "canonical_citizen_id": [
+          "CIT-000015"
+        ]
+      }
+    },
+    {
+      "username": "official_rev_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Revenue",
+      "lastName": "Official 1",
+      "email": "official_rev_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "FISOP@Rev2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "REV"
+        ]
+      }
+    },
+    {
+      "username": "official_rev_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Revenue",
+      "lastName": "Official 2",
+      "email": "official_rev_02@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "REV"
+        ]
+      }
+    },
+    {
+      "username": "official_land_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Land Records",
+      "lastName": "Official 1",
+      "email": "official_land_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "FISOP@Land2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "LAND"
+        ]
+      }
+    },
+    {
+      "username": "official_land_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Land Records",
+      "lastName": "Official 2",
+      "email": "official_land_02@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "LAND"
+        ]
+      }
+    },
+    {
+      "username": "official_welf_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Social Welfare",
+      "lastName": "Official 1",
+      "email": "official_welf_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "FISOP@Welf2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "WELF"
+        ]
+      }
+    },
+    {
+      "username": "official_wel_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Social Welfare",
+      "lastName": "Official 1",
+      "email": "official_wel_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "FISOP@Welf2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "WELF"
+        ]
+      }
+    },
+    {
+      "username": "official_wel_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Social Welfare",
+      "lastName": "Official 2",
+      "email": "official_wel_02@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "WELF"
+        ]
+      }
+    },
+    {
+      "username": "official_edu_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Higher Education",
+      "lastName": "Official 1",
+      "email": "official_edu_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "EDU"
+        ]
+      }
+    },
+    {
+      "username": "official_edu_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Higher Education",
+      "lastName": "Official 2",
+      "email": "official_edu_02@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "EDU"
+        ]
+      }
+    },
+    {
+      "username": "official_hou_01",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Housing",
+      "lastName": "Official 1",
+      "email": "official_hou_01@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "HOU"
+        ]
+      }
+    },
+    {
+      "username": "official_hou_02",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Housing",
+      "lastName": "Official 2",
+      "email": "official_hou_02@gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "DEPARTMENT_OFFICIAL"
+      ],
+      "attributes": {
+        "department_code": [
+          "HOU"
+        ]
+      }
+    },
+    {
+      "username": "admin_user",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Platform",
+      "lastName": "Admin",
+      "email": "admin@interop.gov.example",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    }
+  ]
+}

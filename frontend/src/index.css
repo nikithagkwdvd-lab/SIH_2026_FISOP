@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-orange: #FF6700;
+    --color-platinum: #EBEBEB;
+    --color-silver: #C0C0C0;
+    --color-blue: #3A6EA5;
+    --color-steel-azure: #004E98;
+    
+    --color-gov-primary: #004E98;
+    --color-gov-blue: #3A6EA5;
+    --color-gov-orange: #FF6700;
+    --color-gov-gold: #FF6700;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased selection:bg-sky-200 selection:text-sky-900;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
